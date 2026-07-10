@@ -62,9 +62,9 @@ This capstone does not rebuild detections it correlates ones I have already buil
 
 | Layer | Detection | Source repo |
 |-------|-----------|-------------|
-| Host — Linux | SSH brute-force (Wazuh, rules 5760–40112, level-12 compromise) | `detection-engineering-labs/01` |
+| Host Linux | SSH brute-force (Wazuh, rules 5760–40112, level-12 compromise) | `detection-engineering-labs/01` |
 | Network | Suricata IDS, custom rules `sid 1000001` (scan) / `1000002` (brute-force) | `detection-engineering-labs/03` |
-| Host — Windows | PowerShell investigation (Sysmon EID 1 + Script Block Logging 4104, base64 deobfuscation) | `detection-engineering-labs/04` |
+| Host Windows | PowerShell investigation (Sysmon EID 1 + Script Block Logging 4104, base64 deobfuscation) | `detection-engineering-labs/04` |
 | Cloud SIEM | Sentinel KQL hunts (SSH brute-force + malicious PowerShell) | `sentinel-soc-lab-setup` |
 | Correlation | Splunk SPL kill-chain correlation, IOC-based | `soc-ai-era-detection-lab` |
 
@@ -77,8 +77,8 @@ This capstone does not rebuild detections it correlates ones I have already buil
 | Role | Host | IP |
 |------|------|-----|
 | Attacker | Kali (`Attacker-Tier4`) | `192.168.64.15` |
-| Target — Windows | `JAMES-VM` | *(lab-assigned)* |
-| Target — Linux | Ubuntu Server | *(lab-assigned)* |
+| Target Windows | `JAMES-VM` | *(lab-assigned)* |
+| Target Linux | Ubuntu Server | *(lab-assigned)* |
 | Detection stack | Splunk (indexer + forwarders), Suricata IDS, Microsoft Sentinel | — |
 
 ---
