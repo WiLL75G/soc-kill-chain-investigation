@@ -68,7 +68,7 @@ This capstone does not rebuild detections it correlates ones I have already buil
 | Cloud SIEM | Sentinel KQL hunts (SSH brute-force + malicious PowerShell) | `sentinel-soc-lab-setup` |
 | Correlation | Splunk SPL kill-chain correlation, IOC-based | `soc-ai-era-detection-lab` |
 
-*Link targets are placeholders — confirm each repo is public before publishing.*
+*Link targets are placeholders confirm each repo is public before publishing.*
 
 ---
 
