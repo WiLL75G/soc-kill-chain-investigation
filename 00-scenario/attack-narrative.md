@@ -1,6 +1,6 @@
 # Attack Narrative From Recon to Exfiltration
 
-**Author:** William James
+**Author:** William Gokah
 **Project:** SOC Kill-Chain Investigation (portfolio synthesis)
 **Environment:** Home detection lab Kali `192.168.64.15` (attacker), Windows `JAMES-VM` and Ubuntu targets, Splunk indexer + universal forwarders, Suricata IDS, Microsoft Sentinel.
 
