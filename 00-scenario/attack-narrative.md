@@ -67,7 +67,7 @@ The point of the project is not to demonstrate a new technique it is to demonstr
 
 ---
 
-### Stage 4 — Lateral Movement & Exfiltration
+### Stage 4 Lateral Movement & Exfiltration
 **Attacker action:** From the foothold, the attacker probes internally (SMB/RDP toward other hosts east-west), then stages and exfiltrates data over a covert channel (DNS tunneling / encrypted outbound).
 
 **What it looks like:** SMB (445) / RDP (3389) connections fanning from one internal host to several behaviour a normal user never exhibits; then high-volume or high-frequency DNS queries with long, high-entropy subdomains, or a large encrypted outbound transfer.
