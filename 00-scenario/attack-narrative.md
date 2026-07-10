@@ -1,8 +1,8 @@
-# Attack Narrative — From Recon to Exfiltration
+# Attack Narrative From Recon to Exfiltration
 
 **Author:** William James
 **Project:** SOC Kill-Chain Investigation (portfolio synthesis)
-**Environment:** Home detection lab — Kali `192.168.64.15` (attacker), Windows `JAMES-VM` and Ubuntu targets, Splunk indexer + universal forwarders, Suricata IDS, Microsoft Sentinel.
+**Environment:** Home detection lab Kali `192.168.64.15` (attacker), Windows `JAMES-VM` and Ubuntu targets, Splunk indexer + universal forwarders, Suricata IDS, Microsoft Sentinel.
 
 ---
 
@@ -10,7 +10,7 @@
 
 This narrative describes a single, staged intrusion that runs the full kill chain from reconnaissance to data exfiltration. It is the spine of the capstone: each stage below was **detected by one or more detections I have already built** in my existing repos, and each is investigated as an analyst would on shift.
 
-The point of the project is not to demonstrate a new technique — it is to demonstrate the **investigative thinking that connects the techniques**: one intrusion, seen from multiple layers (host, network, cloud SIEM), correlated into a single story, and mapped to both MITRE ATT&CK and the underlying networking concepts.
+The point of the project is not to demonstrate a new technique it is to demonstrate the **investigative thinking that connects the techniques**: one intrusion, seen from multiple layers (host, network, cloud SIEM), correlated into a single story, and mapped to both MITRE ATT&CK and the underlying networking concepts.
 
 > **Honesty note:** every detection referenced corresponds to real lab work in my existing repositories. Where a stage is simulated rather than fully executed end-to-end, it is labelled as such. No results are invented.
 
@@ -31,37 +31,37 @@ The point of the project is not to demonstrate a new technique — it is to demo
 
 ## The kill chain, stage by stage
 
-### Stage 1 — Reconnaissance
-**Attacker action:** From `192.168.64.15`, the attacker runs a TCP SYN scan (`nmap -sS`) against the target to enumerate open services — mapping the attack surface before committing.
+### Stage 1 Reconnaissance
+**Attacker action:** From `192.168.64.15`, the attacker runs a TCP SYN scan (`nmap -sS`) against the target to enumerate open services mapping the attack surface before committing.
 
-**What it looks like on the wire:** a burst of SYN packets from one source to many destination ports, with SYN-ACK from open ports and RST from closed ones — the classic half-open scan fingerprint.
+**What it looks like on the wire:** a burst of SYN packets from one source to many destination ports, with SYN-ACK from open ports and RST from closed ones the classic half-open scan fingerprint.
 
-**Detected by (existing work):** Suricata custom rule **`sid 1000001`** (port scan, T1046) — from `detection-engineering-labs/03-suricata-ids`. Fired on live Kali scan traffic in the lab.
+**Detected by (existing work):** Suricata custom rule **`sid 1000001`** (port scan, T1046) from `detection-engineering-labs/03-suricata-ids`. Fired on live Kali scan traffic in the lab.
 
-**Analyst read:** recon is a *precursor*, not yet impact — but it tells you an actor is present and profiling. The value is catching it early, before the chain progresses.
+**Analyst read:** recon is a *precursor*, not yet impact but it tells you an actor is present and profiling. The value is catching it early, before the chain progresses.
 
 ---
 
-### Stage 2 — Initial Access
+### Stage 2 Initial Access
 **Attacker action:** Having found SSH (port 22) open, the attacker launches a Hydra brute-force against the Linux target, cycling credentials until one succeeds.
 
 **What it looks like:** a rapid sequence of failed authentications from a single source, terminated by a success — a volume-then-success pattern.
 
 **Detected by (existing work):**
-- **Host layer:** Wazuh SSH brute-force detection — `detection-engineering-labs/01-wazuh-ssh-bruteforce` (rules 5760/5503/5763/5551/2502/40112, level-12 compromise, T1110).
-- **Network layer:** Suricata custom rule **`sid 1000002`** (SSH brute-force, T1110) — same attack caught *network-side*, giving defense-in-depth.
+- **Host layer:** Wazuh SSH brute-force detection `detection-engineering-labs/01-wazuh-ssh-bruteforce` (rules 5760/5503/5763/5551/2502/40112, level-12 compromise, T1110).
+- **Network layer:** Suricata custom rule **`sid 1000002`** (SSH brute-force, T1110) same attack caught *network-side*, giving defense-in-depth.
 - **Cloud SIEM:** the Sentinel SSH brute-force hunt (`sentinel-soc-lab-setup`) confirmed the same pattern (88 failed logins, 8 successes) via KQL.
 
-**Analyst read:** this is the first CIA hit — **Confidentiality** (credential compromise). The *same* attack detected at three independent layers (host, network, cloud) is the defense-in-depth story made concrete: no single blind spot hides it.
+**Analyst read:** this is the first CIA hit **Confidentiality** (credential compromise). The *same* attack detected at three independent layers (host, network, cloud) is the defense-in-depth story made concrete: no single blind spot hides it.
 
 ---
 
-### Stage 3 — Foothold / Command & Control
-**Attacker action:** With access established, the attacker executes an obfuscated PowerShell payload on the Windows endpoint — a base64-encoded command containing a download cradle and a discovery sequence, then establishes a periodic beacon.
+### Stage 3 Foothold / Command & Control
+**Attacker action:** With access established, the attacker executes an obfuscated PowerShell payload on the Windows endpoint a base64-encoded command containing a download cradle and a discovery sequence, then establishes a periodic beacon.
 
 **What it looks like:** PowerShell Script Block Logging (Event ID 4104) capturing the deobfuscated command; Sysmon Event ID 1 recording process creation; regular, machine-timed outbound connections (beaconing).
 
-**Detected by (existing work):** PowerShell investigation lab — `detection-engineering-labs/04-powershell-investigation` (Sysmon EID 1 + Script Block Logging 4104, recovered deobfuscated base64 `-EncodedCommand`, download cradle, discovery sequence, T1059.001). The Sentinel malicious-PowerShell hunt (`sentinel-soc-lab-setup`) corroborates at the cloud layer.
+**Detected by (existing work):** PowerShell investigation lab `detection-engineering-labs/04-powershell-investigation` (Sysmon EID 1 + Script Block Logging 4104, recovered deobfuscated base64 `-EncodedCommand`, download cradle, discovery sequence, T1059.001). The Sentinel malicious-PowerShell hunt (`sentinel-soc-lab-setup`) corroborates at the cloud layer.
 
 **Analyst read:** execution + C2 = the attacker now has a controlled foothold. CIA: **Integrity** (remote control) and continued **Confidentiality** risk. The deobfuscated command is the key artifact — it reveals intent.
 
@@ -78,7 +78,7 @@ The point of the project is not to demonstrate a new technique — it is to demo
 
 ---
 
-### Stage 5 — Impact & Investigation Close
+### Stage 5 Impact & Investigation Close
 **Outcome:** data exfiltration achieved (in the scenario). The investigation reconstructs the full chain by correlating the host, network, and cloud detections into a single timeline, extracts IOCs, and documents response actions (isolate the endpoint, reset credentials, block the C2 destination, add/enforce segmentation).
 
 **Deliverable:** the incident report (`05-incident-report/INCIDENT-REPORT.pdf`) presents this as Summary → Methodology → Findings/IOCs → Response → Conclusion.
