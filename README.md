@@ -2,9 +2,6 @@
 
 **A single intrusion, from reconnaissance to exfiltration, detected across host, network, and cloud layers and reconstructed into one correlated investigation.**
 
-Author: **William Gokah** · Detection Engineer / SOC Analyst
-GitHub: [WiLL75G](https://github.com/WiLL75G) · Focus: remote Tier 1/2 detection engineering
-
 ---
 
 ## What this project is
