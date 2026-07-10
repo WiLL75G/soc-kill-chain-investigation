@@ -45,7 +45,7 @@ The point of the project is not to demonstrate a new technique it is to demonstr
 ### Stage 2 Initial Access
 **Attacker action:** Having found SSH (port 22) open, the attacker launches a Hydra brute-force against the Linux target, cycling credentials until one succeeds.
 
-**What it looks like:** a rapid sequence of failed authentications from a single source, terminated by a success — a volume-then-success pattern.
+**What it looks like:** a rapid sequence of failed authentications from a single source, terminated by a success a volume-then-success pattern.
 
 **Detected by (existing work):**
 - **Host layer:** Wazuh SSH brute-force detection `detection-engineering-labs/01-wazuh-ssh-bruteforce` (rules 5760/5503/5763/5551/2502/40112, level-12 compromise, T1110).
@@ -63,18 +63,18 @@ The point of the project is not to demonstrate a new technique it is to demonstr
 
 **Detected by (existing work):** PowerShell investigation lab `detection-engineering-labs/04-powershell-investigation` (Sysmon EID 1 + Script Block Logging 4104, recovered deobfuscated base64 `-EncodedCommand`, download cradle, discovery sequence, T1059.001). The Sentinel malicious-PowerShell hunt (`sentinel-soc-lab-setup`) corroborates at the cloud layer.
 
-**Analyst read:** execution + C2 = the attacker now has a controlled foothold. CIA: **Integrity** (remote control) and continued **Confidentiality** risk. The deobfuscated command is the key artifact — it reveals intent.
+**Analyst read:** execution + C2 = the attacker now has a controlled foothold. CIA: **Integrity** (remote control) and continued **Confidentiality** risk. The deobfuscated command is the key artifact it reveals intent.
 
 ---
 
 ### Stage 4 — Lateral Movement & Exfiltration
-**Attacker action:** From the foothold, the attacker probes internally (SMB/RDP toward other hosts — east-west), then stages and exfiltrates data over a covert channel (DNS tunneling / encrypted outbound).
+**Attacker action:** From the foothold, the attacker probes internally (SMB/RDP toward other hosts east-west), then stages and exfiltrates data over a covert channel (DNS tunneling / encrypted outbound).
 
-**What it looks like:** SMB (445) / RDP (3389) connections fanning from one internal host to several — behaviour a normal user never exhibits; then high-volume or high-frequency DNS queries with long, high-entropy subdomains, or a large encrypted outbound transfer.
+**What it looks like:** SMB (445) / RDP (3389) connections fanning from one internal host to several behaviour a normal user never exhibits; then high-volume or high-frequency DNS queries with long, high-entropy subdomains, or a large encrypted outbound transfer.
 
 **Detected by (existing work):** the AI-era detection lab (`soc-ai-era-detection-lab`) demonstrates the exfil-correlation pattern (Splunk SPL detections, correlated kill chain, IOC-based). The Sentinel workspace provides the KQL hunting surface for the lateral and DNS-anomaly signals.
 
-**Analyst read:** this is where **network segmentation** would have mattered — on a flat network the lateral movement is silent east-west traffic; forcing it through a segmented, logged chokepoint is what turns it visible. Exfil is the terminal **Confidentiality** breach.
+**Analyst read:** this is where **network segmentation** would have mattered on a flat network the lateral movement is silent east-west traffic; forcing it through a segmented, logged chokepoint is what turns it visible. Exfil is the terminal **Confidentiality** breach.
 
 ---
 
