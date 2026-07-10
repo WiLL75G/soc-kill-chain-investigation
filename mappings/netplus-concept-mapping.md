@@ -14,7 +14,7 @@ The organising idea learned across that cycle: **networking and security are not
 | Concept | How it applies |
 |---------|----------------|
 | **Ports & protocols** | The scan enumerates well-known ports (0–1023) to find listening services; the port *is* the intent signal. |
-| **TCP three-way handshake** | A SYN scan sends SYN and reads the reply — SYN-ACK = open, RST = closed never completing the handshake (half-open). |
+| **TCP three-way handshake** | A SYN scan sends SYN and reads the reply SYN-ACK = open, RST = closed never completing the handshake (half-open). |
 | **OSI layering** | Recon lives at L4 (transport); knowing the layer tells you it's a network-visible event, not an endpoint one. |
 | **IP addressing / subnetting** | The scan's source (`192.168.64.15`) is instantly classifiable as internal (RFC 1918); scoping it to the lab subnet is a subnetting judgement. |
 
